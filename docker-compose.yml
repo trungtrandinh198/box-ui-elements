@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  node:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    environment:
+      - HOST=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - .:/var/www/src-front-end:cached
+    ports:
+      - "80:80"
+    working_dir: /var/www/src-front-end
+    # command: /bin/sh -c "/usr/sbin/sshd && npm run dev"
+    command: /sbin/init && /bin/sh -c "/usr/sbin/sshd -D"
+    tty: true
+    privileged: true

@@ -344,7 +344,9 @@ const ActiveState = ({
                                             onReplyCreate(item.id, FEED_ITEM_TYPE_ANNOTATION, reply)
                                         }
                                         onShowReplies={() => onShowReplies(item.id, FEED_ITEM_TYPE_ANNOTATION)}
-                                        tagged_message={item.description?.message ?? ''}
+                                        tagged_message={
+                                            item.description ? item.description : item.description.message || ''
+                                        }
                                     />
                                 ) : (
                                     <ActivityThread

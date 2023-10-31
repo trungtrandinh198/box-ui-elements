@@ -129,6 +129,7 @@ class SearchFormBase extends React.Component<Props, State> {
         const { onSubmit } = this.props;
 
         if (onSubmit) {
+            console.log('value', value);
             onSubmit(value, event);
         }
     };

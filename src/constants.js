@@ -406,6 +406,7 @@ export const HTTP_OPTIONS: 'OPTIONS' = 'OPTIONS';
 export const HTTP_HEAD: 'HEAD' = 'HEAD';
 
 /* ------------------ HTTP Codes  ---------------------- */
+export const HTTP_STATUS_CODE_NOT_MODIFED: 304 = 304;
 export const HTTP_STATUS_CODE_BAD_REQUEST: 400 = 400;
 export const HTTP_STATUS_CODE_UNAUTHORIZED: 401 = 401;
 export const HTTP_STATUS_CODE_FORBIDDEN: 403 = 403;

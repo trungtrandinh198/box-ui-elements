@@ -30,6 +30,7 @@ import './MoreOptionsCell.scss';
 type Props = {
     canDelete: boolean,
     canDownload: boolean,
+    canMoveOrCopy: boolean,
     canPreview: boolean,
     canRename: boolean,
     canShare: boolean,
@@ -42,6 +43,7 @@ type Props = {
 const MoreOptions = ({
     canPreview,
     canShare,
+    canMoveOrCopy,
     canDownload,
     canDelete,
     canRename,
@@ -50,6 +52,7 @@ const MoreOptions = ({
     onItemDownload,
     onItemRename,
     onItemShare,
+    onItemMoveOrCopy,
     onItemPreview,
     intl,
     isSmall,
@@ -60,6 +63,7 @@ const MoreOptions = ({
     const onDownload = () => onItemDownload(item);
     const onRename = () => onItemRename(item);
     const onShare = () => onItemShare(item);
+    const onMoveOrCopy = () => onItemMoveOrCopy(item);
     const onPreview = () => onItemPreview(item);
 
     const { permissions, type } = item;
@@ -72,6 +76,7 @@ const MoreOptions = ({
     const allowOpen = type === TYPE_WEBLINK;
     const allowDelete = canDelete && permissions[PERMISSION_CAN_DELETE];
     const allowShare = canShare && permissions[PERMISSION_CAN_SHARE];
+    const allowMoveOrCopy = canMoveOrCopy;
     const allowRename = canRename && permissions[PERMISSION_CAN_RENAME];
     const allowDownload =
         canDownload && permissions[PERMISSION_CAN_DOWNLOAD] && type === TYPE_FILE && !Browser.isMobile();
@@ -121,6 +126,11 @@ const MoreOptions = ({
                     {allowShare && (
                         <MenuItem onClick={onShare}>
                             <FormattedMessage {...messages.share} />
+                        </MenuItem>
+                    )}
+                    {allowMoveOrCopy && (
+                        <MenuItem onClick={onMoveOrCopy}>
+                            <FormattedMessage {...messages.moveOrCopy} />
                         </MenuItem>
                     )}
                 </Menu>

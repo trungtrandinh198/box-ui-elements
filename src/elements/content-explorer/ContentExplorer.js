@@ -13,6 +13,7 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
+import { forStatement } from '@babel/types';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
 import Header from '../common/header';
@@ -26,6 +27,7 @@ import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQ
 import Footer from './Footer';
 import PreviewDialog from './PreviewDialog';
 import ShareDialog from './ShareDialog';
+import MoveOrCopyDialog from './MoveOrCopyDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
@@ -97,6 +99,7 @@ type Props = {
     canCreateNewFolder: boolean,
     canDelete: boolean,
     canDownload: boolean,
+    canMoveOrCopy: booloolean,
     canPreview: boolean,
     canRename: boolean,
     canSetShareAccess: boolean,
@@ -121,6 +124,7 @@ type Props = {
     measureRef?: Function,
     messages?: StringMap,
     metadataQuery?: MetadataQuery,
+    moveCopySharedFolders: [],
     onCreate: Function,
     onDelete: Function,
     onDownload: Function,
@@ -201,6 +205,7 @@ class ContentExplorer extends Component<Props, State> {
         canUpload: true,
         canRename: true,
         canShare: true,
+        canMoveOrCopy: true,
         canPreview: true,
         canSetShareAccess: true,
         canCreateNewFolder: true,
@@ -225,6 +230,7 @@ class ContentExplorer extends Component<Props, State> {
             contentSidebarProps: {},
         },
         contentUploaderProps: {},
+        moveCopySharedFolders: [],
     };
 
     /**
@@ -251,6 +257,8 @@ class ContentExplorer extends Component<Props, State> {
             token,
             uploadHost,
         }: Props = props;
+
+        function onMove(targetFolderId) {}
 
         this.api = new API({
             apiHost,
@@ -520,7 +528,6 @@ class ContentExplorer extends Component<Props, State> {
 
         // Close any open modals
         this.closeModals();
-
         this.updateCollection(collection, selected, () => {
             if (triggerNavigationEvent) {
                 // Fire folder navigation event
@@ -1241,6 +1248,45 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
+     * Selects the clicked file/folder and then move or copy for it
+     *
+     * @private
+     * @param {Object} item - file or folder object
+     * @return {void}
+     */
+    moveOrCopy = (item: BoxItem): void => {
+        this.select(item, this.moveOrCopyCallback);
+    };
+
+    /**
+     * Opens the Move/Copy dialog
+     *
+     * @private
+     * @return {void}
+     */
+    moveOrCopyCallback = (): void => {
+        const { selected }: State = this.state;
+        const { canMoveOrCopy }: Props = this.props;
+
+        if (!selected || !canMoveOrCopy) {
+            return;
+        }
+
+        const { permissions } = selected;
+        if (!permissions) {
+            return;
+        }
+
+        // nhớ chỉnh pesmistion
+        const { can_share }: BoxItemPermission = permissions;
+        if (!can_share) {
+            return;
+        }
+
+        this.setState({ isMoveOrCopyModalOpen: true });
+    };
+
+    /**
      * Fetch the shared link info
      * @param {BoxItem} item - The item (folder, file, weblink)
      * @returns {void}
@@ -1344,6 +1390,7 @@ class ContentExplorer extends Component<Props, State> {
             isRenameModalOpen: false,
             isCreateFolderModalOpen: false,
             isShareModalOpen: false,
+            isMoveOrCopyModalOpen: false,
             isUploadModalOpen: false,
             isPreviewModalOpen: false,
         });
@@ -1363,7 +1410,9 @@ class ContentExplorer extends Component<Props, State> {
      * @returns {bool}
      */
     isFocusOnItem = () => {
-        const focusedElementClassList = document.activeElement?.classList;
+        const focusedElementClassList = document.activeElement
+            ? document.activeElement
+            : document.activeElement.classList;
         return focusedElementClassList && focusedElementClassList.contains('be-item-label');
     };
 
@@ -1585,6 +1634,7 @@ class ContentExplorer extends Component<Props, State> {
             canRename,
             canSetShareAccess,
             canShare,
+            canMoveOrCopy,
             canUpload,
             className,
             contentPreviewProps,
@@ -1626,6 +1676,7 @@ class ContentExplorer extends Component<Props, State> {
             isPreviewModalOpen,
             isRenameModalOpen,
             isShareModalOpen,
+            isMoveOrCopyModalOpen,
             isUploadModalOpen,
             markers,
             rootName,
@@ -1650,6 +1701,7 @@ class ContentExplorer extends Component<Props, State> {
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
+
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
@@ -1691,6 +1743,7 @@ class ContentExplorer extends Component<Props, State> {
                             canPreview={canPreview}
                             canRename={canRename}
                             canShare={canShare}
+                            canMoveOrCopy={canMoveOrCopy}
                             currentCollection={currentCollection}
                             focusedRow={focusedRow}
                             gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
@@ -1705,6 +1758,7 @@ class ContentExplorer extends Component<Props, State> {
                             onItemRename={this.rename}
                             onItemSelect={this.select}
                             onItemShare={this.share}
+                            onItemMoveOrCopy={this.moveOrCopy}
                             onMetadataUpdate={this.updateMetadata}
                             onSortChange={this.sort}
                             rootElement={this.rootElement}
@@ -1790,6 +1844,15 @@ class ContentExplorer extends Component<Props, State> {
                             isLoading={isLoading}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
+                        />
+                    ) : null}
+                    {canMoveOrCopy && selected && !!this.appElement && isMoveOrCopyModalOpen ? (
+                        <MoveOrCopyDialog
+                            currentFolderId={id}
+                            onCancel={this.refreshCollection}
+                            item={selected}
+                            api={this.api}
+                            currentCollection={currentCollection}
                         />
                     ) : null}
                     {canPreview && selected && !!this.appElement ? (

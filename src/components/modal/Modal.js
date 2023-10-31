@@ -146,6 +146,7 @@ class Modal extends React.Component<Props> {
         const modalProps = omit(rest, ['onBackdropClick', 'focusElementSelector']);
 
         const WrapperComponent = shouldNotUsePortal ? 'div' : Portal;
+
         // Render a style tag to prevent body from scrolling as long as the Modal is open
         return (
             <WrapperComponent className={classNames('modal', className)} onKeyDown={this.onKeyDown} tabIndex="-1">

@@ -72,7 +72,7 @@ const CategorySelector = ({
 
                     const elementWidth = outerWidth(element);
                     linksWidth -= elementWidth;
-                    const category: string = element.dataset.category ?? '';
+                    const category = element.dataset.category || '';
                     // Save the width of the link being removed for use later
                     linksToRemove[category] = elementWidth;
                     counter += 1;

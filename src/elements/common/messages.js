@@ -107,6 +107,46 @@ const messages = defineMessages({
         description: 'Label for share action.',
         defaultMessage: 'Share',
     },
+    move: {
+        id: 'be.move',
+        description: 'Label for move action.',
+        defaultMessage: 'Move',
+    },
+    moveOrCopy: {
+        id: 'be.moveOrCopy',
+        description: 'Label for move or copy action.',
+        defaultMessage: 'Move or copy',
+    },
+    moveOrCopyDialogLabel: {
+        id: 'be.moveOrCopyDialogLabel',
+        description: 'Label for move or copy dialog',
+        defaultMessage: 'Move or copy {name}',
+    },
+    moveOrCopyDialogDescription: {
+        id: 'be.moveOrCopyDialogDescription',
+        description: 'Label for move or copy description',
+        defaultMessage: 'Select the folder you want to move or copy',
+    },
+    moveOrCopyDialogErrorInUse: {
+        id: 'be.moveOrCopyDialogErrorInUse',
+        description: 'Error text for move or copy dialog when name is already in use',
+        defaultMessage: 'The file or folder already exists in the destination folder.',
+    },
+    moveOrCopyConflict: {
+        id: 'be.moveOrCopyConflict',
+        description: 'Name already exists in the destination folder',
+        defaultMessage: 'Name already exists in the destination folder',
+    },
+    moveOrCopyBadRequest: {
+        id: 'be.moveOrCopyBadRequest',
+        description: 'Error has occurred',
+        defaultMessage: 'Error has occurred',
+    },
+    searchFolderPlaceholder: {
+        id: 'be.searchFolderPlaceholder',
+        description: 'Placehoder for search for child folder',
+        defaultMessage: 'Search Folders',
+    },
     download: {
         id: 'be.download',
         description: 'Label for download action.',

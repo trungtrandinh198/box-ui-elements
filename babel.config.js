@@ -31,6 +31,8 @@ module.exports = {
         },
     ],
     plugins: [
+        '@babel/plugin-proposal-optional-chaining',
+        '@babel/plugin-syntax-nullish-coalescing-operator',
         '@babel/plugin-syntax-dynamic-import',
         '@babel/plugin-transform-flow-strip-types',
         '@babel/plugin-transform-object-assign',

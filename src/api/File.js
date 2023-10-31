@@ -49,7 +49,7 @@ class File extends Item {
         const suffix: string = id ? `/${id}` : '';
         return `${this.getBaseApiUrl()}/files${suffix}`;
     }
-
+    
     /**
      * API for getting download URL for files and file versions
      *
@@ -288,7 +288,7 @@ class File extends Item {
      * @param {Function} errorCallback - Function to call with errors
      * @return {Promise}
      */
-    getFileExtension(id: string, successCallback: Function, errorCallback: ElementsErrorCallback): void {
+    getFileExtension(id: string, idFolder: string, successCallback: Function, errorCallback: ElementsErrorCallback): void {
         if (this.isDestroyed()) {
             return;
         }
@@ -296,6 +296,69 @@ class File extends Item {
         this.getFile(id, successCallback, errorCallback, {
             fields: [FIELD_EXTENSION],
         });
+    }
+
+    successHandler = (): void => {
+        this.successCallback();   
+    }
+
+    copy(id: string, idFolder: string, successCallback: Function, errorCallback: Function = noop): void {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        this.successHandler = successCallback;
+        this.errorCallback = errorCallback;
+        this.fileCopyRequest(id, idFolder);
+    }
+
+    move(id: string, idFolder: string, successCallback: Function, errorCallback: Function = noop): void {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        this.successHandler = successCallback;
+        this.errorCallback = errorCallback;
+        this.fileMoveRequest(id, idFolder);
+    }
+
+
+    fileCopyRequest(id: string, idFolder: string): Promise<void> {
+        if (this.isDestroyed()) {
+            return Promise.reject();
+        }
+
+        const url = `${this.getUrl()}/${id}/copy`;
+        return this.xhr
+            .post({
+                url,
+                data: {
+                    parent: {
+                        id: idFolder,
+                    },
+                },
+            })
+            .then(this.successHandler)
+            .catch(this.errorHandler);
+    }
+
+    fileMoveRequest(id: string, idFolder: string): Promise<void> {
+        if (this.isDestroyed()) {
+            return Promise.reject();
+        }
+
+        const url = `${this.getUrl()}/${id}`;
+        return this.xhr
+            .put({
+                url,
+                data: {
+                    parent: {
+                        id: idFolder,
+                    },
+                },
+            })
+            .then(this.successHandler)
+            .catch(this.errorHandler);
     }
 }
 

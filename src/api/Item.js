@@ -83,6 +83,39 @@ class Item extends Base {
     }
 
     /**
+     * RNS Rename URL for items
+     *
+     * @param {string} id - Item id
+     * @protected
+     * @return {string} Base url for files
+     */
+    getRenameUrl(id: string): string {
+        return `getRenameUrl(${id}) should be overriden`;
+    }
+
+    /**
+     * Copy/Move URL for items
+     *
+     * @param {string} id - Item id
+     * @protected
+     * @return {string} Base url for files
+     */
+    getCopyMoveUrl(id: string): string {
+        return `getCopyMoveUrl(${id}) should be overriden`;
+    }
+
+    /**
+     * Generate Links for items
+     *
+     * @param {string} id - Item id
+     * @protected
+     * @return {string} Base url for files
+     */
+    getGenerateLinkUrl(id: string): string {
+        return `getGenerateLinkUrl(${id}) should be overriden`;
+    }
+
+    /**
      * Merges new data with old data and returns new data
      *
      * @param {String} cacheKey - The cache key of item to merge

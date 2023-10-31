@@ -548,7 +548,7 @@ class ContentExplorer extends Component {
                 }}
                 {...contentExplorerProps}
             >
-                <ContentExplorerHeaderActions
+                {/* <ContentExplorerHeaderActions
                     breadcrumbProps={breadcrumbProps}
                     contentExplorerMode={contentExplorerMode}
                     customInput={customInput}
@@ -565,7 +565,7 @@ class ContentExplorer extends Component {
                     showCreateNewFolderButton={showCreateNewFolderButton}
                 >
                     {headerActionsAccessory}
-                </ContentExplorerHeaderActions>
+                </ContentExplorerHeaderActions> */}
                 {hasSubheader && (
                     <div className="bdl-ContentExplorer-subheader">
                         {canIncludeSubfolders && <ContentExplorerIncludeSubfolders {...includeSubfoldersProps} />}

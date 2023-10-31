@@ -291,7 +291,7 @@ class Folder extends Item {
      * @param {boolean|void} [options.refreshCache] - Optionally Updates the cache
      * @return {void}
      */
-    getFolder(
+    async getFolder(
         id: string,
         limit: number,
         offset: number,
@@ -327,7 +327,7 @@ class Folder extends Item {
         }
 
         // Make the XHR request
-        this.folderRequest(options);
+        await this.folderRequest(options);
     }
 
     /**
@@ -415,6 +415,68 @@ class Folder extends Item {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
         this.folderCreateRequest(name);
+    }
+
+    successHandler = (): void => {
+        this.successCallback();
+    };
+
+    copy(id: string, idFolder: string, successCallback: Function, errorCallback: Function = noop): void {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        this.successHandler = successCallback;
+        this.errorCallback = errorCallback;
+        this.folderCopyRequest(id, idFolder);
+    }
+
+    move(id: string, idFolder: string, successCallback: Function, errorCallback: Function = noop): void {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        this.successHandler = successCallback;
+        this.errorCallback = errorCallback;
+        this.folderMoveRequest(id, idFolder);
+    }
+
+    folderCopyRequest(id: string, idFolder: string): Promise<void> {
+        if (this.isDestroyed()) {
+            return Promise.reject();
+        }
+
+        const url = `${this.getUrl()}/${id}/copy`;
+        return this.xhr
+            .post({
+                url,
+                data: {
+                    parent: {
+                        id: idFolder,
+                    },
+                },
+            })
+            .then(this.successHandler)
+            .catch(this.errorHandler);
+    }
+
+    folderMoveRequest(id: string, idFolder: string): Promise<void> {
+        if (this.isDestroyed()) {
+            return Promise.reject();
+        }
+
+        const url = `${this.getUrl()}/${id}`;
+        return this.xhr
+            .put({
+                url,
+                data: {
+                    parent: {
+                        id: idFolder,
+                    },
+                },
+            })
+            .then(this.successHandler)
+            .catch(this.errorHandler);
     }
 }
 

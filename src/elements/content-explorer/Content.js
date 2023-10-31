@@ -32,6 +32,7 @@ function isEmpty(view: View, currentCollection: Collection, fieldsToShow: Fields
 type Props = {
     canDelete: boolean,
     canDownload: boolean,
+    canMoveOrCopy: boolean,
     canPreview: boolean,
     canRename: boolean,
     canShare: boolean,
@@ -45,6 +46,7 @@ type Props = {
     onItemClick: Function,
     onItemDelete: Function,
     onItemDownload: Function,
+    onItemMoveOrCopy: Function,
     onItemPreview: Function,
     onItemRename: Function,
     onItemSelect: Function,

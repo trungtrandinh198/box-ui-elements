@@ -27,6 +27,7 @@ import './ItemList.scss';
 type Props = {
     canDelete: boolean,
     canDownload: boolean,
+    canMoveOrCopy: boolean,
     canPreview: boolean,
     canRename: boolean,
     canShare: boolean,
@@ -38,6 +39,7 @@ type Props = {
     onItemClick: Function,
     onItemDelete: Function,
     onItemDownload: Function,
+    onItemMoveOrCopy: Function,
     onItemPreview: Function,
     onItemRename: Function,
     onItemSelect: Function,
@@ -57,6 +59,7 @@ const ItemList = ({
     rootId,
     rootElement,
     canShare,
+    canMoveOrCopy,
     canDownload,
     canDelete,
     canPreview,
@@ -67,6 +70,7 @@ const ItemList = ({
     onItemDownload,
     onItemRename,
     onItemShare,
+    onItemMoveOrCopy,
     onItemPreview,
     onSortChange,
     currentCollection,
@@ -89,6 +93,7 @@ const ItemList = ({
     const moreOptionsCell = moreOptionsCellRenderer(
         canPreview,
         canShare,
+        canMoveOrCopy,
         canDownload,
         canDelete,
         canRename,
@@ -97,6 +102,7 @@ const ItemList = ({
         onItemDownload,
         onItemRename,
         onItemShare,
+        onItemMoveOrCopy,
         onItemPreview,
         isSmall,
     );

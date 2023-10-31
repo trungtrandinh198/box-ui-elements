@@ -15,6 +15,7 @@ class ContentExplorerModalContainer extends Component {
         additionalColumns: PropTypes.arrayOf(PropTypes.element),
         /**  Allow users to choose no selections in MULTI_SELECT mode, defaults to false */
         isNoSelectionAllowed: PropTypes.bool,
+        shouldNotUsePortal: PropTypes.bool,
         /** Breadcrumb component options */
         breadcrumbProps: BreadcrumbPropType,
         /** Adds class name. */
@@ -27,6 +28,8 @@ class ContentExplorerModalContainer extends Component {
         modalTitle: PropTypes.string,
         /** Description text shown in the ContentExplorerModal. */
         modalDescription: PropTypes.string,
+        /** Description text shown in the ContentExplorerModal. */
+        modalError: PropTypes.string,
         /** Called when the ContentExplorerModal is closed. */
         onRequestClose: PropTypes.func.isRequired,
         /**
@@ -147,6 +150,10 @@ class ContentExplorerModalContainer extends Component {
         searchInputProps: PropTypes.object,
         /** Custom text for the choose button */
         chooseButtonText: PropTypes.node,
+        /** Loading copy */
+        isCopyButtonLoading: PropTypes.bool,
+        /** Loading move */
+        isMoveButtonLoading: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -197,11 +204,16 @@ class ContentExplorerModalContainer extends Component {
             className,
             modalTitle,
             modalDescription,
+            modalError,
             onCreateFolderSubmit,
             onCreateFolderInput,
             isCreatingFolder,
+            showCreateNewFolderButton,
+            isCopyButtonLoading,
+            isMoveButtonLoading,
             createFolderError,
             initialFoldersPath,
+            shouldNotUsePortal,
             ...rest
         } = this.props;
         const { foldersPath, isNewFolderModalOpen } = this.state;
@@ -213,9 +225,14 @@ class ContentExplorerModalContainer extends Component {
                     className={isNewFolderModalOpen ? 'hidden' : ''}
                     title={modalTitle}
                     description={modalDescription}
+                    error={modalError}
                     initialFoldersPath={initialFoldersPath}
                     isOpen
                     onEnterFolder={this.handleEnterFolder}
+                    showCreateNewFolderButton={showCreateNewFolderButton}
+                    isCopyButtonLoading={isCopyButtonLoading}
+                    isMoveButtonLoading={isMoveButtonLoading}
+                    shouldNotUsePortal={shouldNotUsePortal}
                     onCreateNewFolderButtonClick={this.handleCreateNewFolderButtonClick}
                     {...rest}
                 />

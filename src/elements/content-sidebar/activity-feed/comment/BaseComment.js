@@ -134,7 +134,7 @@ export const BaseComment = ({
     };
 
     // Since we have to pass onCommentEdit through annotations (to Replies), onAnnotationEdit essentially overrides onCommentEdit
-    const onEdit = onAnnotationEdit ?? onCommentEdit;
+    const onEdit = onAnnotationEdit || onCommentEdit;
 
     const canDelete = !!permissions.can_delete;
     const canEdit = onEdit !== noop && !!permissions.can_edit;

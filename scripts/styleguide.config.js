@@ -355,6 +355,7 @@ module.exports = {
             },
         },
     },
+    serverPort: process.env.NODE_PORT || 80,
     title: 'Box UI Elements',
     theme: {
         buttonTextTransform: 'capitalize',
